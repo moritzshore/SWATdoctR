@@ -32,7 +32,7 @@ get_os <- function() {
 #' @keywords internal
 #'
 run_os <- function(exe, os) {
-  if(os == 'unix') exe <- '.'%//%exe
+  if(os == 'unix' | os == "linux") exe <- paste0("./", exe)
   return(exe)
 }
 
@@ -50,9 +50,8 @@ find_swat_exe <- function(project_path, os) {
       .[grepl(".exe$",.)]
 
   } else if(os == "linux") {
-    swat_exe <- system("find"%&&%project_path%&&%"-executable -type f",
-                       intern = T) %>%
-      basename(.)
+    swat_exe <- system(paste0("find ", project_path, ".run_verify", " -executable -type f"),
+                       intern = T) %>% basename(.)
   } else if (os == 'osx') {
     stop('Functionality not tested for Mac. Therefore run aborted')
   }

@@ -33,8 +33,8 @@ build_model_run <- function(project_path, folder_name) {
 #'   simulation years that are skipped before writing SWAT model outputs.
 #'
 #' @importFrom readr read_lines write_lines
-#' @importFrom stringr str_split str_sub
-#' @importFrom lubridate day year
+#' @importFrom stringr str_split str_sub str_remove_all
+#' @importFrom lubridate year
 #' @importFrom tibble tibble
 #'
 #' @keywords internal
@@ -69,13 +69,13 @@ set_print_prt <- function(project_path, run_path, outputs, years_skip, start_dat
   # adjusting start date if passed
   if (!is.null(start_date)) {
     timesimtib$yrc_start = start_date %>% year() %>% as.character()
-    timesimtib$day_start = start_date %>% day() %>% as.character()
+    timesimtib$day_start = start_date  %>% as.Date() %>% format("%j") %>% str_remove_all("0")
   }
 
   # adjusting end date if passed
   if (!is.null(end_date)) {
     timesimtib$yrc_end = end_date %>% year() %>% as.character()
-    timesimtib$day_end = end_date %>% day() %>% as.character()
+    timesimtib$day_end = end_date  %>% as.Date() %>% format("%j") %>% str_remove_all("0")
   }
 
   # applying changes (white space could be dynamically adjusted)
